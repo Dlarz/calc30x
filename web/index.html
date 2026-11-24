@@ -26,9 +26,9 @@ body{font-family:Roboto,"Segoe UI",Arial,sans-serif;display:flex;justify-content
 #ind .sp{flex:1}
 #scr{flex:1;overflow:hidden;font-size:min(5.6vw,2.9vh);padding:0 .35em .25em;display:flex;flex-direction:column;line-height:1.25;position:relative}
 #scr.off{visibility:hidden}
-.ln{white-space:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;min-height:1.3em;display:flex;align-items:center;flex-shrink:0}
+.ln{white-space:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;min-height:1.3em;flex-shrink:0} /* block, not flex: exponents need vertical-align */
 .ln::-webkit-scrollbar{display:none}
-.ln.r>:first-child{margin-left:auto} /* right-aligned, but overflow scrolls instead of clipping the sign */
+.ln.r{text-align:right} /* a line too long for the screen is start-aligned and scrolls, so the sign stays visible */
 .ln>.in{display:inline-block}
 .hsel{background:#1b1f1a;color:#c3cbbb}
 .fill{flex:1}
@@ -41,18 +41,18 @@ body{font-family:Roboto,"Segoe UI",Arial,sans-serif;display:flex;justify-content
 .err{font-weight:700;font-size:1.05em;margin:.4em 0}
 /* MathPrint */
 .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .08em;font-size:.92em}
-.fr>span{padding:0 .1em;line-height:1.1;display:flex;align-items:center;justify-content:center}
+.fr>span{padding:0 .1em;line-height:1.1;display:block;text-align:center;white-space:nowrap} /* not flex: vertical-align (exponents) is ignored in flex items */
 .fr>.fn{border-bottom:.09em solid currentColor}
 .cl{font-weight:900}
 .sup{font-size:.68em;vertical-align:.62em;display:inline-block;line-height:1}
 .sub{font-size:.62em;vertical-align:-.35em;display:inline-block;line-height:1}
 .sq{display:inline-flex;align-items:stretch;vertical-align:middle}
 .sqs{font-size:1.05em;line-height:1.1}
-.sqr{border-top:.09em solid currentColor;padding:0 .12em;display:inline-flex;align-items:center}
+.sqr{border-top:.09em solid currentColor;padding:0 .12em;display:block;white-space:nowrap}
 .ri{font-size:.55em;margin-right:-.45em;align-self:flex-start}
 .bo{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1}
 .bs{font-size:1.35em;line-height:1}
-.bl{font-size:.58em;display:flex;align-items:center}
+.bl{font-size:.58em;display:block;text-align:center;white-space:nowrap}
 .lims{display:inline-flex;flex-direction:column;justify-content:space-between;vertical-align:middle;line-height:1;height:2.1em;margin-right:.1em}
 .ng{font-size:.85em;position:relative;top:-.08em}
 .ee{font-size:.8em}
