@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>30X Pro Rechner</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="30X Pro">
+<meta name="theme-color" content="#111111">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;background:#111;overflow:hidden;touch-action:manipulation}
+body{font-family:Roboto,"Segoe UI",Arial,sans-serif;display:flex;justify-content:center;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#calc{width:100%;max-width:520px;height:100%;background:linear-gradient(#34363b,#26282c);border-radius:22px;padding:2.2vh 3.5% 1.2vh;display:flex;flex-direction:column;border:3px solid #4a4d53}
+#top{display:flex;flex-direction:column;align-items:center;gap:.6vh}
+#solar{width:78%;height:4.2vh;background:linear-gradient(90deg,#2a1414,#3a1c1c 20%,#2a1414 40%,#3a1c1c 60%,#2a1414 80%,#3a1c1c);border-radius:4px;border:2px solid #1a1a1a}
+#brand{color:#eee;text-align:center;line-height:1.05;margin-bottom:.4vh}
+#brand b{font-size:3.1vh;letter-spacing:.5px}#brand span{font-size:3.1vh}#brand small{display:block;font-size:1.5vh;color:#ccc}
+#lcdwrap{background:#1b1c1f;border-radius:10px;padding:1.2vh 2.5%;margin-bottom:1.6vh}
+#lcd{background:#c3cbbb;border-radius:4px;height:24vh;color:#1b1f1a;display:flex;flex-direction:column;box-shadow:inset 0 2px 6px rgba(0,0,0,.45);overflow:hidden;transition:filter .2s}
+#ind{display:flex;gap:.9em;font-size:1.55vh;font-weight:700;padding:.3vh .6em 0;min-height:2.1vh;letter-spacing:.3px}
+#ind .sp{flex:1}
+#scr{flex:1;overflow:hidden;font-size:min(5.6vw,2.9vh);padding:0 .35em .25em;display:flex;flex-direction:column;line-height:1.25;position:relative}
+#scr.off{visibility:hidden}
+.ln{white-space:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;min-height:1.3em;display:flex;align-items:center;flex-shrink:0}
+.ln::-webkit-scrollbar{display:none}
+.ln.r>:first-child{margin-left:auto} /* right-aligned, but overflow scrolls instead of clipping the sign */
+.ln>.in{display:inline-block}
+.hsel{background:#1b1f1a;color:#c3cbbb}
+.fill{flex:1}
+.ttl{background:#1b1f1a;color:#c3cbbb;padding:0 .2em;font-size:.82em;display:flex;gap:.6em}
+.ttl .on{background:#c3cbbb;color:#1b1f1a;padding:0 .2em}
+.inv{background:#1b1f1a;color:#c3cbbb}
+.cur{outline:2px solid #1b1f1a;animation:blinkO 1s steps(1) infinite}
+.sm{font-size:.82em}
+.mi{white-space:nowrap;overflow:hidden}
+.err{font-weight:700;font-size:1.05em;margin:.4em 0}
+/* MathPrint */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .08em;font-size:.92em}
+.fr>span{padding:0 .1em;line-height:1.1;display:flex;align-items:center;justify-content:center}
+.fr>.fn{border-bottom:.09em solid currentColor}
+.cl{font-weight:900}
+.sup{font-size:.68em;vertical-align:.62em;display:inline-block;line-height:1}
+.sub{font-size:.62em;vertical-align:-.35em;display:inline-block;line-height:1}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle}
+.sqs{font-size:1.05em;line-height:1.1}
+.sqr{border-top:.09em solid currentColor;padding:0 .12em;display:inline-flex;align-items:center}
+.ri{font-size:.55em;margin-right:-.45em;align-self:flex-start}
+.bo{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1}
+.bs{font-size:1.35em;line-height:1}
+.bl{font-size:.58em;display:flex;align-items:center}
+.lims{display:inline-flex;flex-direction:column;justify-content:space-between;vertical-align:middle;line-height:1;height:2.1em;margin-right:.1em}
+.ng{font-size:.85em;position:relative;top:-.08em}
+.ee{font-size:.8em}
+.ph{display:inline-block;width:.55em;height:.8em;border:1px dotted currentColor;vertical-align:middle;margin:0 .05em}
+.blk{background:#1b1f1a;color:#c3cbbb;animation:blink 1s steps(1) infinite;min-width:.5em;display:inline-block;text-align:center}
+.bar{display:inline-block;width:0;height:1.05em;border-left:.12em solid #1b1f1a;vertical-align:middle;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{background:transparent;color:inherit;border-color:transparent}}
+@keyframes blinkO{50%{outline-color:transparent}}
+.mx{display:inline-flex;vertical-align:middle;border-left:.09em solid;border-right:.09em solid;padding:0 .15em;margin:0 .1em;font-size:.8em}
+.mx table{border-collapse:collapse}.mx td{padding:0 .25em;text-align:right}
+.grid{width:100%;border-collapse:collapse;font-size:.8em;table-layout:fixed}
+.grid td,.grid th{border:1px solid #1b1f1a;padding:0 .2em;text-align:right;height:1.25em;overflow:hidden;white-space:nowrap}
+.grid th{text-align:center}
+/* keypad */
+#keys{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;column-gap:3.2%;row-gap:.3vh}
+.cell{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;min-height:0}
+.l2{color:#5fb3ec;font-size:min(3.1vw,1.55vh);text-align:center;white-space:nowrap;height:1.9vh;line-height:1.9vh;overflow:visible}
+.l2 sup,.l2 sub{font-size:.7em;line-height:0}.l2 sup{vertical-align:.3em}.l2 sub{vertical-align:-.05em} /* keep 2nd labels off the keys */
+.k{flex:1;border:none;border-radius:9px;color:#fff;background:#141518;font-size:min(4.4vw,2.3vh);font-family:inherit;padding:0;box-shadow:0 2px 0 #000,inset 0 1px 0 rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;line-height:1.05;max-height:6.2vh}
+.k.pressed{transform:translateY(1px);filter:brightness(1.35)}
+.k.blue{background:#5aa4dd;color:#173750}
+.k.num{background:#5c6a76;font-size:min(7vw,3.6vh);font-weight:300}
+.k.op{background:#5b7184;font-size:min(6vw,3.1vh)}
+.k.two{font-size:min(3.8vw,2vh)}
+.k sup{font-size:.6em}.k sub{font-size:.55em}
+.k i{font-family:"Times New Roman",serif;font-size:1.2em}
+#dpad{grid-column:4/span 2;grid-row:1/span 2;margin:1.2vh 4% .6vh;background:linear-gradient(#64809a,#4c6479);border-radius:14px;position:relative;box-shadow:0 3px 0 #000,inset 0 1px 0 rgba(255,255,255,.2)}
+#dpad span{position:absolute;color:#cfe0ee;font-size:1.5vh;opacity:.8}
+#dpad.pressed{filter:brightness(1.2)}
+#foot{color:#ddd;text-align:center;font-size:1.6vh;letter-spacing:1px;padding-top:.6vh;opacity:.85}
+</style>
+</head>
+<body>
+<div id="calc">
+  <div id="top"><div id="solar"></div><div id="brand"><b>30X</b> <span>Pro</span><small>Wissenschaftlicher Rechner</small></div></div>
+  <div id="lcdwrap"><div id="lcd"><div id="ind"></div><div id="scr"></div></div></div>
+  <div id="keys"></div>
+  <div id="foot">SCIENTIFIC</div>
+</div>
+<script src="engine.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>
